@@ -55,11 +55,11 @@ def get_sitemap():
     return generate_sitemap(app)
 
 @app.route("/user", methods=["GET"])
-@token_required
-def get_all_users(current_user):
+# @token_required
+def get_all_users():
 
-    if not current_user.admin:
-        return jsonify({"message" : "Cannot perform that function!"})
+    # if not current_user.admin:
+    #     return jsonify({"message" : "Cannot perform that function!"})
 
     users = User.query.all()
     output = []
