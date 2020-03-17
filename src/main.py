@@ -102,17 +102,12 @@ def get_one_user(current_user, public_id):
 @app.route("/user", methods=["POST"])
 def create_user():
     data = request.get_json()
-    name = data["firstName"]
-    password = data["password"]
-    last = data["lastName"]
-    email = data["email"]
-    phone = data["phone"]
-    hashed_password = generate_password_hash(password, method="sha256")
-    new_user = User(public_id=str(uuid.uuid4()), name=data["firstName"], last=data["lastName"], password=hashed_password, email=data["email"], phone=data["phone"], admin=False)
+    # hashed_password = generate_password_hash(password, method="sha256")
+    new_user = User(public_id=str(uuid.uuid4()), name=data["name"], last=data["last"], password=data["password"], email=data["email"], phone=data["phone"], todos=data["todos"], admin=False)
     db.session.add(new_user)
     db.session.commit()
 
-    send_sms("Welcome! " + data["firstName"],data["phone"])
+    # send_sms("Welcome! " + data["name"],data["phone"])
 
     return jsonify({"message":"New User Created!"})
 
@@ -164,18 +159,11 @@ def login():
     return make_response("Could not verify", 401, {"WWW-Authenticate" : "Basic realm='Login required!'" })
 
 @app.route("/todo", methods=["GET"])
-@token_required
-def get_all_todos(current_user):
-    todos = Todo.query.filter_by(user_id=current_user.id).all()
-    output = []
-
-    for todo in todos:
-        todo_data = {}
-        todo_data["id"] = todo.id
-        todo_data["text"] = todo.text
-        todo_data["complete"] = todo.complete
-        output.append(todo_data)
-    return jsonify({"todos": output})
+# @token_required
+def get_all_todos():
+    todos = Todo.query.all()
+    todos = list(map(lambda x: x.serialize(), todos))
+    return jsonify(todos), 200
 
 @app.route("/todo/<todo_id>", methods=["GET"])
 @token_required
@@ -192,12 +180,12 @@ def get_one_todo(current_user, todo_id):
 
     return jsonify(todo_data)
 
-@app.route("/todo", methods=["POST"])
-@token_required
-def create_todo(current_user):
+@app.route("/todo/<user_id>", methods=["POST"])
+# @token_required
+def create_todo(user_id):
     data = request.get_json()
     
-    new_todo = Todo(text=data["text"], complete=False, user_id=current_user.id)
+    new_todo = Todo(text=data["text"], complete=False, user_id=user_id)
     db.session.add(new_todo)
     db.session.commit()
 

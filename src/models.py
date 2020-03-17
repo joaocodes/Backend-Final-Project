@@ -10,12 +10,32 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     admin = db.Column(db.Boolean) 
+    todos = db.relationship('Todo', backref='user', lazy=True)
+    def serialize(self):
+        return {
+            "name": self.name,
+            "last": self.last,
+            "password": self.password,
+            "email": self.email,
+            "phone": self.phone,
+            "admin": self.admin,
+            "todos":list(map(lambda x: x.serialize(), self.todos)),
+        }
+
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(50))
     complete = db.Column(db.Boolean)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    def serialize(self):
+        return {
+            "text": self.text,
+            "complete": self.complete,
+            "user_id": self.user_id,
+        }
+
+
 
 # class Person(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
