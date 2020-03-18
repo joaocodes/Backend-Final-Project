@@ -57,24 +57,9 @@ def get_sitemap():
 @app.route("/user", methods=["GET"])
 # @token_required
 def get_all_users():
-
-    # if not current_user.admin:
-    #     return jsonify({"message" : "Cannot perform that function!"})
-
     users = User.query.all()
-    output = []
-    for user in users:
-        user_data = {}
-        user_data["public_id"] = user.public_id
-        user_data["name"] = user.name
-        user_data["last_name"] = user.last
-        user_data["email"] = user.email
-        user_data["password"] = user.password
-        user_data["admin"] = user.admin
-        user_data["phone"] = user.phone
-        output.append(user_data)
-
-    return jsonify({"users" : output})
+    users = list(map(lambda x: x.serialize(), users))
+    return jsonify(users), 200
 
 @app.route("/user/<public_id>", methods=["GET"])
 @token_required
@@ -184,7 +169,7 @@ def get_one_todo(current_user, todo_id):
 # @token_required
 def create_todo(user_id):
     data = request.get_json()
-    
+    print(user_id)
     new_todo = Todo(text=data["text"], complete=False, user_id=user_id)
     db.session.add(new_todo)
     db.session.commit()

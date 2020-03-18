@@ -19,7 +19,9 @@ class User(db.Model):
             "email": self.email,
             "phone": self.phone,
             "admin": self.admin,
-            "todos":list(map(lambda x: x.serialize(), self.todos)),
+            "todos": list(map(lambda x: x.serialize(), self.todos)),
+            "id": self.id,
+            "public_id":self.public_id,
         }
 
 
@@ -33,6 +35,7 @@ class Todo(db.Model):
             "text": self.text,
             "complete": self.complete,
             "user_id": self.user_id,
+            "id": self.id,
         }
 
 
