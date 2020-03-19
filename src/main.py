@@ -87,8 +87,9 @@ def get_one_user(current_user, public_id):
 @app.route("/user", methods=["POST"])
 def create_user():
     data = request.get_json()
-    # hashed_password = generate_password_hash(password, method="sha256")
-    new_user = User(public_id=str(uuid.uuid4()), name=data["name"], last=data["last"], password=data["password"], email=data["email"], phone=data["phone"], todos=data["todos"], admin=False)
+    password=data["password"]
+    hashed_password = generate_password_hash(password, method="sha256")
+    new_user = User(public_id=str(uuid.uuid4()), name=data["name"], last=data["last"], password=hashed_password, email=data["email"], phone=data["phone"], todos=data["todos"], admin=False)
     db.session.add(new_user)
     db.session.commit()
 
