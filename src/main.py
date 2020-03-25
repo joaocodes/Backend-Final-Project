@@ -12,6 +12,7 @@ from models import db
 from models import User
 from models import Todo
 from functools import wraps
+
 import jwt
 import datetime
 import uuid
@@ -89,7 +90,7 @@ def create_user():
     data = request.get_json()
     password=data["password"]
     hashed_password = generate_password_hash(password, method="sha256")
-    new_user = User(public_id=str(uuid.uuid4()), name=data["name"], last=data["last"], password=hashed_password, email=data["email"], phone=data["phone"], todos=data["todos"], admin=False)
+    new_user = User(public_id=str(uuid.uuid4()), name=data["name"], last=data["last"], password=hashed_password, email=data["email"], phone=data["phone"], todos=data["todos"], admin=True)
     db.session.add(new_user)
     db.session.commit()
 
