@@ -29,8 +29,8 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(50))
     complete = db.Column(db.Boolean)
-    createdDate = db.Column(db.String(12))
-    dueDate = db.Column(db.String(12))
+    createdDate = db.Column(db.String(25))
+    dueDate = db.Column(db.String(25))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     def serialize(self):
         return {
