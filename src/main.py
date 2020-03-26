@@ -172,7 +172,7 @@ def get_one_todo(current_user, todo_id):
 def create_todo(user_id):
     data = request.get_json()
     print(user_id)
-    new_todo = Todo(text=data["text"], complete=False, user_id=user_id)
+    new_todo = Todo(text=data["text"], complete=False, user_id=user_id, dueDate=data["dueDate"], createdDate=data["createdDate"])
     db.session.add(new_todo)
     db.session.commit()
 
