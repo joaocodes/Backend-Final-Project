@@ -146,8 +146,8 @@ def login():
     return make_response("Could not verify", 401, {"WWW-Authenticate" : "Basic realm='Login required!'" })
 
 @app.route("/todo", methods=["GET"])
-# @token_required
-def get_all_todos():
+@token_required
+def get_all_todos(current_user):
     todos = Todo.query.all()
     todos = list(map(lambda x: x.serialize(), todos))
     return jsonify(todos), 200
