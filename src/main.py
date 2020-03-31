@@ -94,7 +94,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    # send_sms("Welcome! " + data["name"],data["phone"])
+    send_sms("Welcome! " + data["name"],data["phone"])
 
     return jsonify({"message":"New User Created!"})
 
@@ -166,6 +166,21 @@ def get_one_todo(current_user, todo_id):
     todo_data["complete"] = todo.complete
 
     return jsonify(todo_data)
+
+@app.route("/todo/<user_id>", methods=["PUT"])
+def inbound_sms():
+    response = twiml.Response()
+    # we get the SMS message from the request. we could also get the 
+    # "To" and the "From" phone number as well
+    inbound_message = request.form.get("Body")
+    # we can now use the incoming message text in our Python application
+    #   add a function to trigger the put command to update the most current task to completed array
+    if inbound_message == "task done":
+        response.message("Congrats! Keep going!")
+    else:
+        response.message("Hi! Not quite sure what you meant, Please respond with 'task done' to remove your most current todo!.")
+    # we return back the mimetype because Twilio needs an XML response
+    return Response(str(response), mimetype="application/xml"), 200
 
 @app.route("/todo/<user_id>", methods=["POST"])
 # @token_required
