@@ -12,7 +12,6 @@ from models import db
 from models import User
 from models import Todo
 from functools import wraps
-
 import jwt
 import datetime
 import uuid
