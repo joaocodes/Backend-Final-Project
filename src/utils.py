@@ -1,9 +1,6 @@
 from flask import jsonify, url_for
 from twilio.rest import Client
 import os
-
-# Your Account Sid and Auth Token from twilio.com/console
-# DANGER! This is insecure. See http://twil.io/secure
 account_sid = os.environ["TWILIO_ACCOUNT_SID"]
 auth_token = os.environ["AUTH_TOKEN"]
 client = Client(account_sid, auth_token)
@@ -44,7 +41,7 @@ def generate_sitemap(app):
         <h3>To log in USE Lucas/Pass123</h3>
         Api home-page --- specify  real endpoint path like: <ul style="text-align: left;">"""+links_html+"</ul></div>"
 
-# send_sms("Welcome! " + data["name"],data["phone"])
+
 def send_sms(message,phone):
     message = client.messages.create(
                               body=message,
