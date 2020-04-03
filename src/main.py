@@ -140,7 +140,7 @@ def login():
         
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({"public_id" : user.public_id, "exp" : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},  'secret')
-        return jsonify({"token": token.decode("UTF-8")})
+        return jsonify({"token": token.decode("UTF-8"), "LoggedIn User id": user.id})
 
     return make_response("Could not verify", 401, {"WWW-Authenticate" : "Basic realm='Login required!'" })
 
