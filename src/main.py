@@ -197,12 +197,13 @@ def create_todo(user_id):
 @app.route("/todo/<todo_id>", methods=["PUT"])
 @token_required
 def complete_todo(current_user, todo_id):
-    todo = Todo.query.filter_by(id=todo_id, user_id=current_user.id).first()
-
+    todo = Todo.query.filter_by(id=todo_id).first()
+    print(todo)
     if not todo:
         return jsonify({"message" : "No such Todo found"})
 
     todo.complete = True
+    
     db.session.commit()
 
     return jsonify({"message" : "Todo Marked completed =) Well done!"})
@@ -210,7 +211,7 @@ def complete_todo(current_user, todo_id):
 @app.route("/todo/<todo_id>", methods=["DELETE"])
 @token_required
 def delete_todo(current_user, todo_id):
-    todo = Todo.query.filter_by(id=todo_id, user_id=current_user.id).first()
+    todo = Todo.query.filter_by(id=todo_id).first()
 
     if not todo:
         return jsonify({"message" : "No such Todo found"})
